@@ -1,7 +1,12 @@
 library auth;
 
-/// A Calculator.
-class Calculator {
-  /// Returns [value] plus 1.
-  int addOne(int value) => value + 1;
-}
+// User Model
+export 'src/model/user.dart';
+
+// Auth Provider
+export 'src/provider/auth.dart';
+
+// Screens
+export 'src/screens/splash_screen.dart';
+export 'src/screens/auth_screen.dart';
+
