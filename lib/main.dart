@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/screens/home_screen.dart';
+import 'package:tasks/screens/list_screen.dart';
 import 'package:tasks/screens/task_screen.dart';
 
 void main() => runApp(const MyApp());
@@ -22,7 +23,8 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       home: const HomeScreen(),
       routes: {
-        TaskScreen.routeName: (ctx) => const TaskScreen()
+        ListScreen.routeName: (ctx) => ListScreen(),
+        TaskScreen.routeName: (ctx) => TaskScreen()
       },
     );
   }
