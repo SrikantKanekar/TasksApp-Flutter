@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/model/task.dart';
-import 'package:tasks/screens/task_screen.dart';
+import 'package:tasks/screens/task_screen/task_screen.dart';
 
 class TaskItem extends StatelessWidget {
   final Task task;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/screens/home_screen.dart';
-import 'package:tasks/screens/list_screen.dart';
-import 'package:tasks/screens/task_screen.dart';
+import 'package:tasks/screens/home_screen/home_screen.dart';
+import 'package:tasks/screens/list_screen/list_screen.dart';
+import 'package:tasks/screens/task_screen/task_screen.dart';
 
 void main() => runApp(const MyApp());
 

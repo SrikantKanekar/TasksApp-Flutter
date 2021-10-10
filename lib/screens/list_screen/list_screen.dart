@@ -2,18 +2,15 @@ import 'package:flutter/material.dart';
 
 class ListScreen extends StatelessWidget {
   static const routeName = '/list';
-  final TextEditingController controller = TextEditingController();
-  bool newList = true;
 
   ListScreen({Key? key}) : super(key: key);
+
+  final controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var name = ModalRoute.of(context)!.settings.arguments as String?;
-    if (name != null) {
-      controller.text = name;
-      newList = false;
-    }
+    controller.text = name ?? '';
 
     return Scaffold(
       appBar: AppBar(
@@ -23,11 +20,13 @@ class ListScreen extends StatelessWidget {
           },
           icon: const Icon(Icons.close),
         ),
-        title:
-            newList ? const Text('Create new list') : const Text('Rename list'),
+        title: name == null
+            ? const Text('Create new list')
+            : const Text('Rename list'),
         actions: [
           TextButton(
             onPressed: () {
+              // TODO(add or rename list)
               Navigator.of(context).pop();
             },
             child: const Text('Done'),
@@ -38,6 +37,7 @@ class ListScreen extends StatelessWidget {
         controller: controller,
         autofocus: true,
         onSubmitted: (value) {
+          // TODO(add or rename list)
           Navigator.of(context).pop();
         },
         decoration: const InputDecoration(

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/repository/data.dart';
-import 'package:tasks/widgets/my_bottom_bar.dart';
-import 'package:tasks/widgets/my_floating_button.dart';
-import 'package:tasks/widgets/task_list_widget.dart';
+import 'package:tasks/screens/home_screen/my_bottom_bar.dart';
+import 'package:tasks/screens/home_screen/my_floating_button.dart';
+import 'package:tasks/screens/home_screen/task_list_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -38,6 +38,7 @@ class _HomeScreenState extends State<HomeScreen> {
               .map((list) => TaskListWidget(tasks: list.tasks))
               .toList(),
         ),
+        resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: const MyFloatingButton(),
         bottomNavigationBar: const MyBottomBar(),

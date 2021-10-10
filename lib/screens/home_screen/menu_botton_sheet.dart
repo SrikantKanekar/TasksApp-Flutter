@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/repository/data.dart';
+import 'package:tasks/screens/list_screen/list_screen.dart';
 
 class MenuBottomSheet extends StatelessWidget {
   const MenuBottomSheet({Key? key}) : super(key: key);
@@ -22,11 +23,14 @@ class MenuBottomSheet extends StatelessWidget {
         ),
         const Divider(),
         ListTile(
-          leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.add),
-          ),
+          leading: const Icon(Icons.add),
           title: const Text('Create new list'),
+          onTap: (){
+            Navigator.of(context).pop();
+            Navigator.of(context).pushNamed(
+              ListScreen.routeName,
+            );
+          },
         ),
         const SizedBox(height: 8)
       ],

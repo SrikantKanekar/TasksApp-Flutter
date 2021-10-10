@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/widgets/menu_botton_sheet.dart';
-import 'package:tasks/widgets/options_botton_sheet.dart';
+import 'package:tasks/screens/home_screen/menu_botton_sheet.dart';
+import 'package:tasks/screens/home_screen/options_botton_sheet.dart';
 
 class MyBottomBar extends StatelessWidget {
   const MyBottomBar({Key? key}) : super(key: key);

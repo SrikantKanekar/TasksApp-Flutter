@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/model/task.dart';
-import 'package:tasks/widgets/task_item.dart';
+import 'package:tasks/screens/home_screen/task_item.dart';
 
 class TaskListWidget extends StatefulWidget {
   final List<Task> tasks;
@@ -35,15 +35,13 @@ class _TaskListWidgetState extends State<TaskListWidget> {
       ListTile(
         contentPadding: const EdgeInsets.symmetric(horizontal: 26),
         title: Text('Completed (${completed.length})'),
-        trailing: IconButton(
-          onPressed: () {
-            setState(() {
-              expanded = !expanded;
-            });
-          },
-          icon: Icon(
-              expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
-        ),
+        trailing: Icon(
+            expanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down),
+        onTap: () {
+          setState(() {
+            expanded = !expanded;
+          });
+        },
       ),
     );
     widgets.addAll(completedWidgets);

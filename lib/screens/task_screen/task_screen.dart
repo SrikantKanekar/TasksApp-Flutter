@@ -6,13 +6,14 @@ class TaskScreen extends StatelessWidget {
   static const routeName = '/task';
 
   TaskScreen({Key? key}) : super(key: key);
-  var titleController = TextEditingController();
-  var descController = TextEditingController();
+
+  final titleController = TextEditingController();
+  final descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     var task = ModalRoute.of(context)!.settings.arguments as Task;
-    var taskList = getParent(task);
+    var listName = getListName(task);
     titleController.text = task.name;
     descController.text = task.description;
 
@@ -22,7 +23,9 @@ class TaskScreen extends StatelessWidget {
           IconButton(
             tooltip: 'Delete',
             icon: const Icon(Icons.delete),
-            onPressed: () {},
+            onPressed: () {
+              // TODO(delete current task)
+            },
           ),
         ],
       ),
@@ -33,7 +36,7 @@ class TaskScreen extends StatelessWidget {
             padding: const EdgeInsets.only(left: 16, top: 12),
             child: DropdownButtonHideUnderline(
               child: DropdownButton(
-                value: taskList!,
+                value: listName!,
                 items: tasksLists
                     .map(
                       (list) => DropdownMenuItem(
@@ -42,18 +45,17 @@ class TaskScreen extends StatelessWidget {
                       ),
                     )
                     .toList(),
-                onChanged: (value){
-
-                },
+                onChanged: (value) {},
               ),
             ),
           ),
           TextField(
             controller: titleController,
             decoration: const InputDecoration(
-                contentPadding: EdgeInsets.symmetric(horizontal: 16),
-                hintText: 'Enter title',
-                border: InputBorder.none),
+              contentPadding: EdgeInsets.symmetric(horizontal: 16),
+              hintText: 'Enter title',
+              border: InputBorder.none,
+            ),
             style: const TextStyle(fontSize: 25),
           ),
           ListTile(
@@ -79,10 +81,25 @@ class TaskScreen extends StatelessWidget {
           )
         ],
       ),
+      bottomNavigationBar: BottomAppBar(
+        child: Padding(
+          padding: const EdgeInsets.only(right: 12),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                    task.completed ? 'Mark uncompleted' : 'Mark completed'),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
-  String? getParent(Task task) {
+  String? getListName(Task task) {
     for (var list in tasksLists) {
       if (list.tasks.contains(task)) {
         return list.name;
