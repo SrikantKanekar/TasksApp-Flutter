@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/model/task_list.dart';
 
 class ListScreen extends StatelessWidget {
   static const routeName = '/list';
@@ -9,6 +11,7 @@ class ListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var bloc = TaskListsProvider.of(context);
     var name = ModalRoute.of(context)!.settings.arguments as String?;
     controller.text = name ?? '';
 
@@ -26,7 +29,9 @@ class ListScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              // TODO(add or rename list)
+              bloc.addTaskList(
+                TaskList(name: controller.text, tasks: []),
+              );
               Navigator.of(context).pop();
             },
             child: const Text('Done'),
@@ -37,7 +42,9 @@ class ListScreen extends StatelessWidget {
         controller: controller,
         autofocus: true,
         onSubmitted: (value) {
-          // TODO(add or rename list)
+          bloc.addTaskList(
+            TaskList(name: controller.text, tasks: []),
+          );
           Navigator.of(context).pop();
         },
         decoration: const InputDecoration(
