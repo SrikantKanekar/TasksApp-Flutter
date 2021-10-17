@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_bloc.dart';
 import 'package:tasks/blocs/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
-import 'package:tasks/screens/home_screen/my_bottom_bar.dart';
-import 'package:tasks/screens/home_screen/my_floating_button.dart';
-import 'package:tasks/screens/home_screen/task_list_widget.dart';
+import 'package:tasks/screens/home_screen/bottom_bar/my_bottom_bar.dart';
+import 'package:tasks/screens/home_screen/new_task/my_floating_button.dart';
+import 'package:tasks/screens/home_screen/task_lists/task_list_widget.dart';
+import 'package:tasks/screens/home_screen/user/user_dialog.dart';
 import 'package:tasks/screens/loading_screen/loading_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,9 +14,7 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen>
-    with TickerProviderStateMixin {
-
+class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   late TabController _tabController;
 
   @override
@@ -35,40 +33,75 @@ class _HomeScreenState extends State<HomeScreen>
           length: snapshot.data!.length,
         );
 
+        _tabController.addListener(() {
+          bloc.changeListIndex(_tabController.index);
+        });
+
+        bloc.listIndex.listen((index) {
+          _tabController.animateTo(index);
+        });
+
         return Scaffold(
           appBar: AppBar(
             centerTitle: true,
             title: const Text('Tasks'),
             bottom: TabBar(
+              isScrollable: true,
               controller: _tabController,
-              tabs: snapshot.data!.map((list) => Tab(text: list.name)).toList(),
+              tabs: snapshot.data!
+                  .map(
+                    (list) => Tab(
+                      child: Text(
+                        capitalize(list.name),
+                        style: const TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
             ),
             actions: [
               IconButton(
                 tooltip: 'User',
                 icon: const Icon(Icons.person),
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (ctx) {
+                      return const UserDialog();
+                    },
+                  );
+                },
               ),
             ],
           ),
           body: TabBarView(
             controller: _tabController,
             children: snapshot.data!
-                .map((list) => TaskListWidget(tasks: list.tasks))
+                .map((list) => TaskListWidget(
+                      tasks: list.tasks,
+                      order: list.order,
+                    ))
                 .toList(),
           ),
           resizeToAvoidBottomInset: false,
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           floatingActionButton: const MyFloatingButton(),
-          bottomNavigationBar: MyBottomBar(
-            changeTab: (index) {
-              _tabController.animateTo(index);
-            },
-          ),
+          bottomNavigationBar: const MyBottomBar(),
         );
       },
     );
+  }
+
+  String capitalize(String string) {
+    return string
+        .split(" ")
+        .map(
+          (str) => '${str[0].toUpperCase()}${str.substring(1)}',
+        )
+        .join(" ");
   }
 
   @override

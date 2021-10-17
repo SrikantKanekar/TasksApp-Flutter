@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/screens/home_screen/menu_botton_sheet.dart';
-import 'package:tasks/screens/home_screen/options_botton_sheet.dart';
+import 'package:tasks/screens/home_screen/bottom_bar/menu_botton_sheet.dart';
+import 'package:tasks/screens/home_screen/bottom_bar/options_botton_sheet.dart';
 
 class MyBottomBar extends StatelessWidget {
-  final Function(int) changeTab;
-
-  const MyBottomBar({
-    Key? key,
-    required this.changeTab,
-  }) : super(key: key);
+  const MyBottomBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -24,9 +19,7 @@ class MyBottomBar extends StatelessWidget {
               showModalBottomSheet(
                 context: context,
                 builder: (ctx) {
-                  return MenuBottomSheet(
-                    changeTab: changeTab,
-                  );
+                  return const MenuBottomSheet();
                 },
               );
             },

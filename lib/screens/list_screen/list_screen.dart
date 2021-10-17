@@ -29,9 +29,11 @@ class ListScreen extends StatelessWidget {
         actions: [
           TextButton(
             onPressed: () {
-              bloc.addTaskList(
-                TaskList(name: controller.text, tasks: []),
-              );
+              name == null
+                  ? bloc.addTaskList(
+                      TaskList(name: controller.text, tasks: []),
+                    )
+                  : bloc.renameTaskList(controller.text);
               Navigator.of(context).pop();
             },
             child: const Text('Done'),
@@ -42,9 +44,11 @@ class ListScreen extends StatelessWidget {
         controller: controller,
         autofocus: true,
         onSubmitted: (value) {
-          bloc.addTaskList(
-            TaskList(name: controller.text, tasks: []),
-          );
+          name == null
+              ? bloc.addTaskList(
+                  TaskList(name: controller.text, tasks: []),
+                )
+              : bloc.renameTaskList(controller.text);
           Navigator.of(context).pop();
         },
         decoration: const InputDecoration(

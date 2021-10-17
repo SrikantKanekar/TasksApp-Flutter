@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/screens/home_screen/bottom_bar/sort_dialog.dart';
 import 'package:tasks/screens/list_screen/list_screen.dart';
+import 'package:tasks/util/enums/order.dart';
 
 class OptionsBottomSheet extends StatelessWidget {
   const OptionsBottomSheet({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    var bloc = TaskListsProvider.of(context);
+    var order = bloc.getCurrentTaskListOrder();
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -13,37 +18,13 @@ class OptionsBottomSheet extends StatelessWidget {
         ListTile(
           contentPadding: const EdgeInsets.only(left: 30),
           title: const Text('Sort by'),
-          subtitle: const Text('My Order'),
+          subtitle: Text(order == Order.normal ? 'Normal' : 'Date'),
           onTap: () {
             Navigator.of(context).pop();
             showDialog(
               context: context,
               builder: (ctx) {
-                return AlertDialog(
-                  title: const Text('Sort by'),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RadioListTile(
-                        title: Text('My order'),
-                        value: true,
-                        groupValue: true,
-                        onChanged: null,
-                      ),
-                      RadioListTile(
-                        title: Text('Date'),
-                        value: true,
-                        groupValue: true,
-                        onChanged: null,
-                      )
-                    ],
-                  ),
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(20),
-                    ),
-                  ),
-                );
+                return SortDialog();
               },
             );
           },
@@ -56,7 +37,7 @@ class OptionsBottomSheet extends StatelessWidget {
             Navigator.of(context).pop();
             Navigator.of(context).pushNamed(
               ListScreen.routeName,
-              arguments: 'old list name',
+              arguments: bloc.getCurrentTaskListName(),
             );
           },
         ),
@@ -64,6 +45,7 @@ class OptionsBottomSheet extends StatelessWidget {
           contentPadding: const EdgeInsets.only(left: 30),
           title: const Text('Delete list'),
           onTap: () {
+            bloc.deleteTaskList();
             Navigator.of(context).pop();
           },
         ),
@@ -80,11 +62,16 @@ class OptionsBottomSheet extends StatelessWidget {
                   content: const Text('Are you sure?'),
                   actions: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(ctx).pop();
+                      },
                       child: const Text('Cancel'),
                     ),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        bloc.deleteCompletedTasks();
+                        Navigator.of(ctx).pop();
+                      },
                       child: const Text('OK'),
                     )
                   ],

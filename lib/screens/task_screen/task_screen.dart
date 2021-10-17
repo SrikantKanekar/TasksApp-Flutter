@@ -1,58 +1,100 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/blocs/task_lists_provider.dart';
 import 'package:tasks/model/task.dart';
-import 'package:tasks/repository/repository.dart';
 import 'package:tasks/screens/task_screen/task_date_time.dart';
 import 'package:tasks/screens/task_screen/task_description.dart';
 import 'package:tasks/screens/task_screen/task_title.dart';
 import 'package:tasks/screens/task_screen/tasks_dropdown.dart';
 
-class TaskScreen extends StatelessWidget {
+class TaskScreen extends StatefulWidget {
   static const routeName = '/task';
 
-  TaskScreen({Key? key}) : super(key: key);
+  const TaskScreen({Key? key}) : super(key: key);
 
+  @override
+  State<TaskScreen> createState() => _TaskScreenState();
+}
+
+class _TaskScreenState extends State<TaskScreen> {
+  late Task task;
   final titleController = TextEditingController();
   final descController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    var task = ModalRoute.of(context)!.settings.arguments as Task;
+    var bloc = TaskListsProvider.of(context);
+    var taskId = ModalRoute.of(context)!.settings.arguments as String;
+    task = bloc.getTaskById(taskId);
 
     titleController.text = task.name;
     descController.text = task.description;
 
-    return Scaffold(
-      appBar: AppBar(
-        actions: [
-          IconButton(
-            tooltip: 'Delete',
-            icon: const Icon(Icons.delete),
-            onPressed: () {
-              // TODO(delete current task)
-            },
+    return WillPopScope(
+      onWillPop: () async {
+        bloc.updateTask(
+          Task(
+            id: task.id,
+            name: titleController.text,
+            description: descController.text,
+            dateTime: task.dateTime,
+            completed: task.completed,
           ),
-        ],
-      ),
-      body: ListView(
-        children: [
-          TasksDropdown(task: task),
-          TaskTitle(titleController: titleController),
-          TaskDescription(descController: descController),
-          const TaskDateTime()
-        ],
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.only(right: 12),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: [
-              TextButton(
-                onPressed: () {},
-                child: Text(
-                    task.completed ? 'Mark uncompleted' : 'Mark completed'),
-              ),
-            ],
+        );
+        return true;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          actions: [
+            IconButton(
+              tooltip: 'Delete',
+              icon: const Icon(Icons.delete),
+              onPressed: () {
+                bloc.deleteTask(task);
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        ),
+        body: ListView(
+          children: [
+            TasksDropdown(
+              onChanged: (value) => bloc.changeTaskList(task, value!),
+            ),
+            TaskTitle(titleController: titleController),
+            TaskDescription(descController: descController),
+            TaskDateTime(
+              dateTime: task.dateTime,
+              update: (dateTime) {
+                setState(() {
+                  task.dateTime = dateTime;
+                });
+              },
+              clear: () {
+                setState(() {
+                  task.dateTime = null;
+                });
+              },
+            )
+          ],
+        ),
+        bottomNavigationBar: BottomAppBar(
+          child: Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      task.completed = !task.completed;
+                    });
+                  },
+                  child: Text(
+                    task.completed ? 'Mark uncompleted' : 'Mark completed',
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

@@ -10,6 +10,7 @@ class Repository {
       TaskList(name: 'list 2', tasks: generateTasks('list2')),
       TaskList(name: 'list 3', tasks: generateTasks('list3')),
       TaskList(name: 'list 4', tasks: generateTasks('list4')),
+      TaskList(name: 'list 5', tasks: generateTasks('list5')),
     ];
   }
 
@@ -18,10 +19,11 @@ class Repository {
     for (var a = 0; a < 10; a++) {
       tasks.add(
         Task(
-            id: '$prefix$a',
-            name: 'Task $a',
-            description: 'description $a',
-            completed: a < 4),
+          id: '$prefix$a',
+          name: 'Task $a',
+          description: '',
+          completed: a < 4,
+        ),
       );
     }
     return tasks;
