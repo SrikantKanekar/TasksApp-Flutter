@@ -1,5 +1,7 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
-import 'package:keyboard_visibility/keyboard_visibility.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:tasks/screens/home_screen/new_task/new_task_content.dart';
 
 class MyFloatingButton extends StatefulWidget {
@@ -11,16 +13,17 @@ class MyFloatingButton extends StatefulWidget {
 }
 
 class _MyFloatingButtonState extends State<MyFloatingButton> {
+  late StreamSubscription<bool> keyboardSubscription;
   bool keyboardExpanded = false;
 
   @override
   void initState() {
     super.initState();
-    KeyboardVisibilityNotification().addNewListener(
-      onChange: (bool visible) {
-        keyboardExpanded = visible;
-      },
-    );
+    var keyboardVisibilityController = KeyboardVisibilityController();
+
+    keyboardSubscription = keyboardVisibilityController.onChange.listen((bool visible) {
+      keyboardExpanded = visible;
+    });
   }
 
   @override
@@ -55,5 +58,11 @@ class _MyFloatingButtonState extends State<MyFloatingButton> {
         );
       },
     );
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
   }
 }

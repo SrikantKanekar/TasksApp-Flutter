@@ -1,8 +1,12 @@
+import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:provider/provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/screens/home_screen/home_screen.dart';
 import 'package:tasks/screens/list_screen/list_screen.dart';
 import 'package:tasks/screens/task_screen/task_screen.dart';
+
+import 'blocs/theme/theme_provider.dart';
 
 void main() => runApp(const MyApp());
 
@@ -11,24 +15,54 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TaskListsProvider(
-      child: MaterialApp(
-        title: 'Tasks',
-        theme: ThemeData(
-          primarySwatch: Colors.purple,
-          brightness: Brightness.light,
+    return ChangeNotifierProvider.value(
+      value: Auth(),
+      child: ThemeProvider(
+        child: TaskListsProvider(
+          child: const App()
         ),
-        darkTheme: ThemeData(
-          brightness: Brightness.dark,
-        ),
-        themeMode: ThemeMode.dark,
-        debugShowCheckedModeBanner: false,
-        home: const HomeScreen(),
-        routes: {
-          ListScreen.routeName: (ctx) => ListScreen(),
-          TaskScreen.routeName: (ctx) => TaskScreen()
-        },
       ),
+    );
+  }
+}
+
+class App extends StatelessWidget {
+  const App({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    var themeBloc = ThemeProvider.of(context);
+    return StreamBuilder(
+      stream: themeBloc.theme,
+      builder: (context, AsyncSnapshot<ThemeMode> snapshot) {
+        return Consumer<Auth>(
+          builder: (ctx, auth, _) => MaterialApp(
+            title: 'Tasks',
+            theme: ThemeData(
+              primarySwatch: Colors.blue,
+              brightness: Brightness.light,
+            ),
+            darkTheme: ThemeData(
+              brightness: Brightness.dark,
+            ),
+            themeMode: auth.isAuth ? snapshot.data : ThemeMode.light,
+            debugShowCheckedModeBanner: false,
+            home: auth.isAuth
+                ? const HomeScreen()
+                : FutureBuilder(
+              future: auth.tryAutoLogin(),
+              builder: (ctx, snapShot) =>
+              snapShot.connectionState == ConnectionState.waiting
+                  ? const SplashScreen()
+                  : const AuthScreen(),
+            ),
+            routes: {
+              ListScreen.routeName: (ctx) => ListScreen(),
+              TaskScreen.routeName: (ctx) => const TaskScreen()
+            },
+          ),
+        );
+      },
     );
   }
 }

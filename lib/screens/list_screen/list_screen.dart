@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 
 class ListScreen extends StatelessWidget {
@@ -37,6 +37,7 @@ class ListScreen extends StatelessWidget {
               Navigator.of(context).pop();
             },
             child: const Text('Done'),
+            style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary),
           )
         ],
       ),

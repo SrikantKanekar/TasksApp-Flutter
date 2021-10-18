@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 
 class TasksDropdown extends StatelessWidget {

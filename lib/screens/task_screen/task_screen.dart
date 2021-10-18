@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/screens/task_screen/task_date_time.dart';
 import 'package:tasks/screens/task_screen/task_description.dart';

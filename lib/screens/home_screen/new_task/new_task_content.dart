@@ -2,8 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:tasks/blocs/task_lists_bloc.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_bloc.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/screens/home_screen/new_task/new_task_description.dart';
 import 'package:tasks/screens/home_screen/new_task/new_task_title.dart';

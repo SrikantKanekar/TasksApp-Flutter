@@ -8,9 +8,9 @@ class Task extends Comparable<Task> {
   Task({
     required this.id,
     required this.name,
-    required this.description,
+    this.description = '',
     this.dateTime,
-    required this.completed,
+    this.completed = false,
   });
 
   @override

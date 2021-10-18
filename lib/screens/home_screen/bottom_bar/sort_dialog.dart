@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/util/enums/order.dart';
 
 class SortDialog extends StatefulWidget {

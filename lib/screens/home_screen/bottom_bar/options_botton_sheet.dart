@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/screens/home_screen/bottom_bar/sort_dialog.dart';
 import 'package:tasks/screens/list_screen/list_screen.dart';
 import 'package:tasks/util/enums/order.dart';

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/screens/home_screen/bottom_bar/my_bottom_bar.dart';
 import 'package:tasks/screens/home_screen/new_task/my_floating_button.dart';

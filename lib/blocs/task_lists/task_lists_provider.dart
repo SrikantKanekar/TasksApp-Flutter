@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tasks/blocs/task_lists_bloc.dart';
+import 'package:tasks/blocs/task_lists/task_lists_bloc.dart';
 
 class TaskListsProvider extends InheritedWidget {
   final TaskListsBloc bloc;
