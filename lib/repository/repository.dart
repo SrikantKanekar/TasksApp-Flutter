@@ -1,116 +1,62 @@
-import 'package:tasks/database/entity_mapper.dart';
-import 'package:tasks/database/task_list_dao.dart';
+import 'package:tasks/database/cache_data_source/cache_data_source.dart';
+import 'package:tasks/database/cache_data_source/cache_data_source_impl.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/model/task_list.dart';
-import 'package:tasks/database/app_database.dart';
 import 'package:tasks/util/enums/order.dart';
 
 class Repository {
-  late final TaskListDao dao;
-
-  Repository() {
-    init();
-  }
-
-  init() async {
-    var database =
-        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
-    dao = database.taskListDao;
-  }
+  final CacheDataSource cache = CacheDataSourceImpl();
 
   Stream<List<TaskList>> getTaskListsAsStream() {
-    var data = dao.getAllTaskListsAsStream();
-    return data.map(
-      (list) => list
-          .map((taskList) => EntityMapper().mapFromDatabase(taskList))
-          .toList(),
-    );
+    return cache.getTaskListsAsStream();
   }
 
-  Future<List<TaskList>> getTaskLists() async {
-    var data = await dao.getAllTaskLists();
-    return data.map((list) => EntityMapper().mapFromDatabase(list)).toList();
+  Future<List<TaskList>> getTaskLists() {
+    return cache.getTaskLists();
   }
 
   void addTaskList(TaskList taskList) {
-    dao.insertList(EntityMapper().mapToDatabase(taskList));
+    cache.addTaskList(taskList);
   }
 
-  renameTaskList(String name, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.name = name;
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void renameTaskList(String name, int index) async {
+    cache.renameTaskList(name, index);
   }
 
-  updateTaskListOrder(Order order, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.order = order;
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void updateTaskListOrder(Order order, int index) async {
+    cache.updateTaskListOrder(order, index);
   }
 
-  deleteTaskList(int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    dao.deleteList(EntityMapper().mapToDatabase(list));
+  void deleteTaskList(int index) async {
+    cache.deleteTaskList(index);
   }
 
   // Task
   Future<Task> getTaskById(String id, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    return list.tasks.firstWhere((task) => task.id == id);
+    return cache.getTaskById(id, index);
   }
 
-  addTask(Task task, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.tasks.add(task);
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void addTask(Task task, int index) async {
+    cache.addTask(task, index);
   }
 
-  updateTask(Task task, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    var taskIndex = list.tasks.indexWhere((item) => item.id == task.id);
-    list.tasks[taskIndex] = task;
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void updateTask(Task task, int index) async {
+    cache.updateTask(task, index);
   }
 
-  toggleCompleted(Task task, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    var taskIndex = list.tasks.indexWhere((item) => item.id == task.id);
-    list.tasks[taskIndex].completed = !task.completed;
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void toggleCompleted(Task task, int index) async {
+    cache.toggleCompleted(task, index);
   }
 
   Future<int> changeTaskList(Task task, String name, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.tasks.removeWhere((item) => item.id == task.id);
-
-    var newListIndex = taskLists.indexWhere((list) => list.name == name);
-    var newList = taskLists[newListIndex];
-    newList.tasks.add(task);
-
-    dao.updateList(EntityMapper().mapToDatabase(list));
-    dao.updateList(EntityMapper().mapToDatabase(newList));
-    return newListIndex;
+    return cache.changeTaskList(task, name, index);
   }
 
-  deleteTask(Task task, int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.tasks.removeWhere((item) => item.id == task.id);
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void deleteTask(Task task, int index) async {
+    cache.deleteTask(task, index);
   }
 
-  deleteCompletedTasks(int index) async {
-    var taskLists = await getTaskLists();
-    var list = taskLists[index];
-    list.tasks.removeWhere((task) => task.completed);
-    dao.updateList(EntityMapper().mapToDatabase(list));
+  void deleteCompletedTasks(int index) async {
+    cache.deleteCompletedTasks(index);
   }
 }

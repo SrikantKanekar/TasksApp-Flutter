@@ -1,11 +1,11 @@
 import 'dart:convert';
 
-import 'package:tasks/database/task_list_entity.dart';
+import 'package:tasks/database/entity/task_list_entity.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/util/enums/order.dart';
 
-class EntityMapper {
+class TaskListMapper {
   TaskList mapFromDatabase(TaskListEntity entity) {
     var decoded = json.decode(entity.tasks);
     var tasks = List<Task>.from(decoded.map((task)=> Task.fromJson(task)));

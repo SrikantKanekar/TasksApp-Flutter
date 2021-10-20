@@ -30,14 +30,13 @@ class ListScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               name == null
-                  ? bloc.addTaskList(
-                      TaskList(name: controller.text, tasks: []),
-                    )
+                  ? bloc.addTaskList(TaskList(name: controller.text, tasks: []))
                   : bloc.renameTaskList(controller.text);
               Navigator.of(context).pop();
             },
             child: const Text('Done'),
-            style: TextButton.styleFrom(primary: Theme.of(context).colorScheme.onPrimary),
+            style: TextButton.styleFrom(
+                primary: Theme.of(context).colorScheme.onPrimary),
           )
         ],
       ),

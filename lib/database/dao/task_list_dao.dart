@@ -1,5 +1,5 @@
 import 'package:floor/floor.dart';
-import 'package:tasks/database/task_list_entity.dart';
+import 'package:tasks/database/entity/task_list_entity.dart';
 
 @dao
 abstract class TaskListDao {

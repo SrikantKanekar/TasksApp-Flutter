@@ -28,19 +28,19 @@ class TaskListsBloc {
   // TaskList
   int getCurrentIndex() => listIndex;
 
-  addTaskList(TaskList taskList) {
+  void addTaskList(TaskList taskList) {
     repository.addTaskList(taskList);
   }
 
-  renameTaskList(String name) {
+  void renameTaskList(String name) {
     repository.renameTaskList(name, listIndex);
   }
 
-  updateTaskListOrder(Order order) {
+  void updateTaskListOrder(Order order) {
     repository.updateTaskListOrder(order, listIndex);
   }
 
-  deleteTaskList() {
+  void deleteTaskList() {
     repository.deleteTaskList(listIndex);
     listIndex = 0;
     _listIndexController.sink.add(0);
@@ -51,29 +51,29 @@ class TaskListsBloc {
     return repository.getTaskById(id, listIndex);
   }
 
-  addTask(Task task) {
+  void addTask(Task task) {
     repository.addTask(task, listIndex);
   }
 
-  updateTask(Task task) {
+  void updateTask(Task task) {
     repository.updateTask(task, listIndex);
   }
 
-  toggleCompleted(Task task) {
+  void toggleCompleted(Task task) {
     repository.toggleCompleted(task, listIndex);
   }
 
-  changeTaskList(Task task, String name) async {
+  void changeTaskList(Task task, String name) async {
     var newIndex = await repository.changeTaskList(task, name, listIndex);
     listIndex = newIndex;
     _listIndexController.sink.add(newIndex);
   }
 
-  deleteTask(Task task) {
+  void deleteTask(Task task) {
     repository.deleteTask(task, listIndex);
   }
 
-  deleteCompletedTasks() {
+  void deleteCompletedTasks() {
     repository.deleteCompletedTasks(listIndex);
   }
 
