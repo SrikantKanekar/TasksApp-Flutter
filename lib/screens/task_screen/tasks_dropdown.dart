@@ -25,7 +25,7 @@ class TasksDropdown extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16, top: 12),
           child: DropdownButtonHideUnderline(
             child: DropdownButton(
-              value: bloc.getCurrentTaskListName(),
+              value: snapshot.data![bloc.getCurrentIndex()].name,
               items: snapshot.data!
                   .map(
                     (list) => DropdownMenuItem(

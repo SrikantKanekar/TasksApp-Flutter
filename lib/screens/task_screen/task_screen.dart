@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/blocs/task_lists/task_lists_bloc.dart';
 import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task.dart';
+import 'package:tasks/screens/loading_screen/loading_screen.dart';
 import 'package:tasks/screens/task_screen/task_date_time.dart';
 import 'package:tasks/screens/task_screen/task_description.dart';
 import 'package:tasks/screens/task_screen/task_title.dart';
@@ -16,28 +18,38 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
-  late Task task;
+  Task? task;
+  TaskListsBloc? bloc;
   final titleController = TextEditingController();
   final descController = TextEditingController();
 
   @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      var taskId = ModalRoute.of(context)!.settings.arguments as String;
+      bloc = TaskListsProvider.of(context);
+      task = await bloc!.getTaskById(taskId);
+      titleController.text = task!.name;
+      descController.text = task!.description;
+      setState(() {});
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    var bloc = TaskListsProvider.of(context);
-    var taskId = ModalRoute.of(context)!.settings.arguments as String;
-    task = bloc.getTaskById(taskId);
-
-    titleController.text = task.name;
-    descController.text = task.description;
-
+    if (task == null) {
+      return const LoadingScreen();
+    }
     return WillPopScope(
       onWillPop: () async {
-        bloc.updateTask(
+        bloc!.updateTask(
           Task(
-            id: task.id,
+            id: task!.id,
             name: titleController.text,
             description: descController.text,
-            dateTime: task.dateTime,
-            completed: task.completed,
+            dateTime: task!.dateTime,
+            completed: task!.completed,
           ),
         );
         return true;
@@ -49,7 +61,7 @@ class _TaskScreenState extends State<TaskScreen> {
               tooltip: 'Delete',
               icon: const Icon(Icons.delete),
               onPressed: () {
-                bloc.deleteTask(task);
+                bloc!.deleteTask(task!);
                 Navigator.of(context).pop();
               },
             ),
@@ -58,20 +70,20 @@ class _TaskScreenState extends State<TaskScreen> {
         body: ListView(
           children: [
             TasksDropdown(
-              onChanged: (value) => bloc.changeTaskList(task, value!),
+              onChanged: (value) => bloc!.changeTaskList(task!, value!),
             ),
             TaskTitle(titleController: titleController),
             TaskDescription(descController: descController),
             TaskDateTime(
-              dateTime: task.dateTime,
+              dateTime: task!.dateTime,
               update: (dateTime) {
                 setState(() {
-                  task.dateTime = dateTime;
+                  task!.dateTime = dateTime;
                 });
               },
               clear: () {
                 setState(() {
-                  task.dateTime = null;
+                  task!.dateTime = null;
                 });
               },
             )
@@ -86,11 +98,11 @@ class _TaskScreenState extends State<TaskScreen> {
                 TextButton(
                   onPressed: () {
                     setState(() {
-                      task.completed = !task.completed;
+                      task!.completed = !task!.completed;
                     });
                   },
                   child: Text(
-                    task.completed ? 'Mark uncompleted' : 'Mark completed',
+                    task!.completed ? 'Mark uncompleted' : 'Mark completed',
                   ),
                 ),
               ],

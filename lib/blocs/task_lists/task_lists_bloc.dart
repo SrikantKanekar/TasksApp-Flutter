@@ -7,96 +7,77 @@ import 'package:tasks/repository/repository.dart';
 import 'package:tasks/util/enums/order.dart';
 
 class TaskListsBloc {
-  final _taskLists = Repository().data;
-  int _listIndex = 0;
+  final repository = Repository();
+  int listIndex = 0;
 
   // Controllers
-  final _taskListsController = BehaviorSubject<List<TaskList>>();
   final _listIndexController = BehaviorSubject<int>();
 
   // Streams
-  Stream<List<TaskList>> get taskLists => _taskListsController.stream;
-  Stream<int> get listIndex => _listIndexController.stream;
+  Stream<List<TaskList>> get taskLists => repository.getTaskListsAsStream();
+  Stream<int> get listIndexStream => _listIndexController.stream;
 
   // Sink
   Function(int) get changeListIndex => _listIndexController.sink.add;
 
   TaskListsBloc() {
-    _taskListsController.sink.add(_taskLists);
-    _listIndexController.sink.add(_listIndex);
-
-    _listIndexController.stream.listen((index) => _listIndex = index);
+    _listIndexController.sink.add(listIndex);
+    _listIndexController.stream.listen((index) => listIndex = index);
   }
 
   // TaskList
-  String? getCurrentTaskListName() => _taskLists[_listIndex].name;
-  Order getCurrentTaskListOrder() => _taskLists[_listIndex].order;
+  int getCurrentIndex() => listIndex;
 
   addTaskList(TaskList taskList) {
-    _taskLists.add(taskList);
-    _taskListsController.sink.add(_taskLists);
+    repository.addTaskList(taskList);
   }
 
   renameTaskList(String name) {
-    _taskLists[_listIndex].name = name;
-    _taskListsController.sink.add(_taskLists);
+    repository.renameTaskList(name, listIndex);
   }
 
   updateTaskListOrder(Order order) {
-    _taskLists[_listIndex].order = order;
-    _taskListsController.sink.add(_taskLists);
+    repository.updateTaskListOrder(order, listIndex);
   }
 
   deleteTaskList() {
-    _taskLists.removeAt(_listIndex);
-    _listIndex = 0;
+    repository.deleteTaskList(listIndex);
+    listIndex = 0;
     _listIndexController.sink.add(0);
-    _taskListsController.sink.add(_taskLists);
   }
 
   // Task
-  Task getTaskById(String id) => _taskLists[_listIndex].tasks.firstWhere((task) => task.id == id);
+  Future<Task> getTaskById(String id) async {
+    return repository.getTaskById(id, listIndex);
+  }
 
   addTask(Task task) {
-    _taskLists[_listIndex].tasks.add(task);
-    _taskListsController.sink.add(_taskLists);
+    repository.addTask(task, listIndex);
   }
 
   updateTask(Task task) {
-    var taskIndex = _taskLists[_listIndex].tasks.indexWhere((item) => item.id == task.id);
-    _taskLists[_listIndex].tasks[taskIndex] = task;
-    _taskListsController.sink.add(_taskLists);
+    repository.updateTask(task, listIndex);
   }
 
   toggleCompleted(Task task) {
-    var taskIndex = _taskLists[_listIndex].tasks.indexWhere((item) => item.id == task.id);
-    _taskLists[_listIndex].tasks[taskIndex].completed = !task.completed;
-    _taskListsController.sink.add(_taskLists);
+    repository.toggleCompleted(task, listIndex);
   }
 
-  changeTaskList(Task task, String name) {
-    _taskLists[_listIndex].tasks.removeWhere((item) => item.id == task.id);
-
-    var newListIndex = _taskLists.indexWhere((list) => list.name == name);
-    _listIndex = newListIndex;
-    _listIndexController.sink.add(newListIndex);
-
-    _taskLists[_listIndex].tasks.add(task);
-    _taskListsController.sink.add(_taskLists);
+  changeTaskList(Task task, String name) async {
+    var newIndex = await repository.changeTaskList(task, name, listIndex);
+    listIndex = newIndex;
+    _listIndexController.sink.add(newIndex);
   }
 
   deleteTask(Task task) {
-    _taskLists[_listIndex].tasks.removeWhere((item) => item.id == task.id);
-    _taskListsController.sink.add(_taskLists);
+    repository.deleteTask(task, listIndex);
   }
 
   deleteCompletedTasks() {
-    _taskLists[_listIndex].tasks.removeWhere((task) => task.completed);
-    _taskListsController.sink.add(_taskLists);
+    repository.deleteCompletedTasks(listIndex);
   }
 
   dispose() {
-    _taskListsController.close();
     _listIndexController.close();
   }
 }

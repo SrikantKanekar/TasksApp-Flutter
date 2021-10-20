@@ -13,6 +13,21 @@ class Task extends Comparable<Task> {
     this.completed = false,
   });
 
+  Task.fromJson(Map<String, dynamic> json)
+      : id = json['id'],
+        name = json['name'],
+        description = json['description'],
+        dateTime = DateTime.tryParse(json['dateTime'] ?? ''),
+        completed = json['completed'];
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'name' : name,
+    'description' : description,
+    'dateTime' : dateTime?.toIso8601String(),
+    'completed' : completed
+  };
+
   @override
   int compareTo(Task other) {
     if(dateTime == null && other.dateTime == null){

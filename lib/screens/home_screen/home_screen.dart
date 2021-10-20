@@ -29,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
         }
 
         _tabController = TabController(
+          initialIndex: bloc.listIndex,
           vsync: this,
           length: snapshot.data!.length,
         );
@@ -37,7 +38,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
           bloc.changeListIndex(_tabController.index);
         });
 
-        bloc.listIndex.listen((index) {
+        bloc.listIndexStream.listen((index) {
           _tabController.animateTo(index);
         });
 

@@ -240,8 +240,8 @@ class _AuthCardState extends State<AuthCard>
                       horizontal: 30.0,
                       vertical: 8.0,
                     ),
-                    color: Theme.of(context).primaryColor,
-                    textColor: Colors.white,
+                    color: Theme.of(context).colorScheme.background,
+                    textColor: Theme.of(context).colorScheme.onSurface,
                   ),
                 FlatButton(
                   child: Text(
@@ -252,7 +252,7 @@ class _AuthCardState extends State<AuthCard>
                     vertical: 4,
                   ),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  textColor: Theme.of(context).primaryColor,
+                  textColor: Theme.of(context).colorScheme.onSurface,
                 ),
               ],
             ),

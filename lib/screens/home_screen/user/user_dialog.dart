@@ -63,14 +63,6 @@ class UserDialog extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.supervisor_account),
-            title: const Text('Add another account'),
-            onTap: () {
-              Navigator.of(context).pop();
-              auth.logout();
-            },
-          ),
-          ListTile(
             leading: const Icon(Icons.delete_outline),
             title: const Text('Delete account'),
             onTap: () {

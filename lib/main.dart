@@ -45,7 +45,7 @@ class App extends StatelessWidget {
             darkTheme: ThemeData(
               brightness: Brightness.dark,
             ),
-            themeMode: auth.isAuth ? snapshot.data : ThemeMode.light,
+            themeMode: snapshot.data,
             debugShowCheckedModeBanner: false,
             home: auth.isAuth
                 ? const HomeScreen()

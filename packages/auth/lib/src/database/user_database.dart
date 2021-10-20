@@ -9,10 +9,11 @@ class UserDatabase {
   static Future<Database> _database() async {
     final dbPath = await sql.getDatabasesPath();
     return sql.openDatabase(
-      path.join(dbPath!, 'users.db'),
+      path.join(dbPath, 'users.db'),
       onCreate: (db, version) {
         return db.execute(
-            'CREATE TABLE user_table (email TEXT PRIMARY KEY, username TEXT, password TEXT, favourites TEXT)');
+          'CREATE TABLE user_table (email TEXT PRIMARY KEY, username TEXT, password TEXT, favourites TEXT)',
+        );
       },
       version: 1,
     );
