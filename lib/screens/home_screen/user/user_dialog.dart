@@ -1,6 +1,7 @@
 import 'package:auth/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/blocs/theme/theme_provider.dart';
 
 class UserDialog extends StatelessWidget {
@@ -10,6 +11,7 @@ class UserDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     var auth = Provider.of<Auth>(context);
     var themeBloc = ThemeProvider.of(context);
+    var bloc = TaskListsProvider.of(context);
 
     return AlertDialog(
       contentPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 30),
@@ -68,6 +70,7 @@ class UserDialog extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               auth.deleteAccount();
+              bloc.deleteDatabase();
             },
           ),
           ListTile(
@@ -76,6 +79,7 @@ class UserDialog extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               auth.logout();
+              bloc.deleteDatabase();
             },
           )
         ],

@@ -46,7 +46,7 @@ class TaskDateTime extends StatelessWidget {
           lastDate: DateTime(3000),
         );
         if (value != null) {
-          update(value);
+          update(value.toUtc());
         }
       },
     );

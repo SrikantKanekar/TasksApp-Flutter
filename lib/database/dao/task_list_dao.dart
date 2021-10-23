@@ -13,9 +13,21 @@ abstract class TaskListDao {
   @insert
   Future<void> insertList(TaskListEntity taskList);
 
+  @insert
+  Future<void> insertAll(List<TaskListEntity> taskLists);
+
+  @Query('SELECT * FROM TaskListEntity WHERE name = :name')
+  Future<TaskListEntity?> getListByName(String name);
+
   @update
   Future<void> updateList(TaskListEntity taskList);
 
+  @update
+  Future<void> updateAll(List<TaskListEntity> taskLists);
+
   @delete
   Future<void> deleteList(TaskListEntity taskList);
+
+  @delete
+  Future<void> deleteAll(List<TaskListEntity> taskLists);
 }

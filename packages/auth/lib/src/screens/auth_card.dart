@@ -61,6 +61,7 @@ class _AuthCardState extends State<AuthCard>
   void dispose() {
     super.dispose();
     _controller.dispose();
+
   }
 
   void _showErrorDialog(String message) {
@@ -90,15 +91,15 @@ class _AuthCardState extends State<AuthCard>
       try {
         if (_authMode == AuthMode.login) {
           await Provider.of<Auth>(context, listen: false).login(
-            _authData['email'] as String,
-            _authData['password'] as String,
+            email: _authData['email'] as String,
+            password: _authData['password'] as String,
           );
         } else {
-          await Provider.of<Auth>(context, listen: false).register(User(
-              email: _authData['email'] as String,
-              username: _authData['username'] as String,
-              password: _authData['password'] as String,
-              favourites: []));
+          await Provider.of<Auth>(context, listen: false).register(
+            email: _authData['email'] as String,
+            username: _authData['username'] as String,
+            password: _authData['password'] as String,
+          );
         }
       } catch (error) {
         _showErrorDialog(error.toString());

@@ -3,10 +3,10 @@ import 'dart:convert';
 import 'package:tasks/database/entity/task_list_entity.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/model/task_list.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 class TaskListMapper {
-  TaskList mapFromDatabase(TaskListEntity entity) {
+  static TaskList mapFromDatabase(TaskListEntity entity) {
     var decoded = json.decode(entity.tasks);
     var tasks = List<Task>.from(decoded.map((task)=> Task.fromJson(task)));
     return TaskList(
@@ -17,7 +17,7 @@ class TaskListMapper {
     );
   }
 
-  TaskListEntity mapToDatabase(TaskList taskList) {
+  static TaskListEntity mapToDatabase(TaskList taskList) {
     return TaskListEntity(
       id: taskList.id,
       name: taskList.name,

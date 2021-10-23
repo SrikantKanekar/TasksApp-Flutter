@@ -99,10 +99,10 @@ class _NewTaskContentState extends State<NewTaskContent> {
 
   submit(TaskListsBloc bloc) {
     var newTask = Task(
-      id: Random().nextInt(1000).toString(),
+      id: Random().nextInt(10000).toString(),
       name: _titleController.text,
       description: _descController.text,
-      dateTime: dateTime,
+      dateTime: dateTime?.toUtc(),
       completed: false,
     );
     bloc.addTask(newTask);

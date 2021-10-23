@@ -10,10 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  sqflite: 2.0.0+4
   provider: ^4.0.0
-  shared_preferences: 2.0.8
   http: ^0.13.3
+  jwt_decoder: ^2.0.1
+  shared_preferences: 2.0.8
 
 dev_dependencies:
   flutter_test:

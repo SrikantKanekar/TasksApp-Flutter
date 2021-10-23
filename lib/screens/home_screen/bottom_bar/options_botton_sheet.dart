@@ -3,7 +3,7 @@ import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/screens/home_screen/bottom_bar/sort_dialog.dart';
 import 'package:tasks/screens/list_screen/list_screen.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 class OptionsBottomSheet extends StatelessWidget {
   const OptionsBottomSheet({Key? key}) : super(key: key);

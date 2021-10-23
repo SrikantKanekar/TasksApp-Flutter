@@ -167,9 +167,26 @@ class _$TaskListDao extends TaskListDao {
   }
 
   @override
+  Future<TaskListEntity?> getListByName(String name) async {
+    return _queryAdapter.query('SELECT * FROM TaskListEntity WHERE name = ?1',
+        mapper: (Map<String, Object?> row) => TaskListEntity(
+            id: row['id'] as int?,
+            name: row['name'] as String,
+            tasks: row['tasks'] as String,
+            order: row['order'] as int),
+        arguments: [name]);
+  }
+
+  @override
   Future<void> insertList(TaskListEntity taskList) async {
     await _taskListEntityInsertionAdapter.insert(
         taskList, OnConflictStrategy.abort);
+  }
+
+  @override
+  Future<void> insertAll(List<TaskListEntity> taskLists) async {
+    await _taskListEntityInsertionAdapter.insertList(
+        taskLists, OnConflictStrategy.abort);
   }
 
   @override
@@ -179,7 +196,18 @@ class _$TaskListDao extends TaskListDao {
   }
 
   @override
+  Future<void> updateAll(List<TaskListEntity> taskLists) async {
+    await _taskListEntityUpdateAdapter.updateList(
+        taskLists, OnConflictStrategy.abort);
+  }
+
+  @override
   Future<void> deleteList(TaskListEntity taskList) async {
     await _taskListEntityDeletionAdapter.delete(taskList);
+  }
+
+  @override
+  Future<void> deleteAll(List<TaskListEntity> taskLists) async {
+    await _taskListEntityDeletionAdapter.deleteList(taskLists);
   }
 }

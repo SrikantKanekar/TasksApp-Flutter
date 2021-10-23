@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tasks/blocs/task_lists/task_lists_bloc.dart';
 import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/screens/home_screen/bottom_bar/my_bottom_bar.dart';
@@ -15,12 +16,28 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
+  late TaskListsBloc bloc;
   late TabController _tabController;
+  bool synced = false;
+
+  @override
+  Future<void> didChangeDependencies() async {
+    if (!synced) {
+      bloc = TaskListsProvider.of(context);
+      await bloc.init();
+      await bloc.syncTaskLists();
+    }
+    setState(() {
+      synced = true;
+    });
+    super.didChangeDependencies();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final bloc = TaskListsProvider.of(context);
-
+    if (!synced) {
+      return const LoadingScreen();
+    }
     return StreamBuilder(
       stream: bloc.taskLists,
       builder: (context, AsyncSnapshot<List<TaskList>> snapshot) {

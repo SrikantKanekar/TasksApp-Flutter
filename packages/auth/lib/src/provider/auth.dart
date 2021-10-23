@@ -1,6 +1,7 @@
-import 'package:auth/src/database/user_database.dart';
 import 'package:auth/src/model/user.dart';
+import 'package:auth/src/network/network.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Auth with ChangeNotifier {
@@ -14,47 +15,54 @@ class Auth with ChangeNotifier {
     return _user;
   }
 
-  Future<void> register(User newUser) async {
-    try{
-      var user = await UserDatabase.getUser(newUser.email);
-      if (user == null){
-        _user = newUser;
-        notifyListeners();
-        await UserDatabase.insert(newUser);
+  Future<void> register({
+    required String email,
+    required String username,
+    required String password,
+  }) async {
+    try {
+      var token = await Network.register(
+        email: email,
+        username: username,
+        password: password,
+      );
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      _user = User.fromMap(decodedToken);
+      notifyListeners();
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('email', newUser.email);
-      } else {
-        throw Exception('User with given email already exists');
-      }
-    } catch(e) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+    } catch (e) {
       rethrow;
     }
   }
 
-  Future<void> login(String email, String password) async {
-    try{
-      var user = await UserDatabase.getUser(email);
-      if (user != null && user.password == password){
-        _user = user;
-        notifyListeners();
+  Future<void> login({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      var token = await Network.login(
+        email: email,
+        password: password,
+      );
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      _user = User.fromMap(decodedToken);
+      notifyListeners();
 
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setString('email', email);
-      } else {
-        throw Exception('Invalid email or password');
-      }
-    } catch(e) {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('token', token);
+    } catch (e) {
       rethrow;
     }
   }
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
-    var email = prefs.getString('email');
-    if (email != null) {
-      var user = await UserDatabase.getUser(email);
-      _user = user;
+    var token = prefs.getString('token');
+    if (token != null) {
+      Map<String, dynamic> decodedToken = JwtDecoder.decode(token);
+      _user = User.fromMap(decodedToken);
       notifyListeners();
       return true;
     }
@@ -69,27 +77,6 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> deleteAccount() async {
-    await UserDatabase.deleteUser(_user!.email);
     logout();
-  }
-
-  Future<void> addFavourites(String name) async {
-    var success = await UserDatabase.addFavourite(_user!.email, name);
-    if (success){
-      _user!.favourites.add(name);
-      notifyListeners();
-    }
-  }
-
-  Future<void> removeFavourites(String name) async {
-    var success = await UserDatabase.removeFavourite(_user!.email, name);
-    if (success){
-      _user!.favourites.remove(name);
-      notifyListeners();
-    }
-  }
-
-  bool isFav(String name){
-    return _user!.favourites.contains(name);
   }
 }

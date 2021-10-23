@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/screens/home_screen/task_lists/task_item.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 class TaskListWidget extends StatefulWidget {
   final List<Task> tasks;

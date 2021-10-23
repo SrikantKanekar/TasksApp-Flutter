@@ -4,7 +4,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/repository/repository.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 class TaskListsBloc {
   final repository = Repository();
@@ -26,7 +26,17 @@ class TaskListsBloc {
   }
 
   // TaskList
-  int getCurrentIndex() => listIndex;
+  int getCurrentIndex() {
+    return listIndex;
+  }
+
+  Future<void> init() {
+    return repository.init();
+  }
+
+  Future<void> syncTaskLists() {
+    return repository.syncTaskLists();
+  }
 
   void addTaskList(TaskList taskList) {
     repository.addTaskList(taskList);
@@ -75,6 +85,10 @@ class TaskListsBloc {
 
   void deleteCompletedTasks() {
     repository.deleteCompletedTasks(listIndex);
+  }
+
+  void deleteDatabase() {
+    repository.deleteDatabase();
   }
 
   dispose() {

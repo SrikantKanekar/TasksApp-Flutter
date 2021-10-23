@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
 import 'package:tasks/screens/loading_screen/loading_screen.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 class SortDialog extends StatefulWidget {
   const SortDialog({Key? key}) : super(key: key);

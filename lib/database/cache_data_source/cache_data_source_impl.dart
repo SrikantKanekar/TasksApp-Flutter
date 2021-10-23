@@ -3,41 +3,45 @@ import 'package:tasks/database/database/app_database.dart';
 import 'package:tasks/database/mapper/task_list_mapper.dart';
 import 'package:tasks/model/task.dart';
 import 'package:tasks/model/task_list.dart';
-import 'package:tasks/util/enums/order.dart';
+import 'package:tasks/model/order.dart';
 
 import 'cache_data_source.dart';
 
 class CacheDataSourceImpl implements CacheDataSource {
-  late final TaskListDao dao;
+  TaskListDao? dao;
 
-  CacheDataSourceImpl() {
-    $FloorAppDatabase
-        .databaseBuilder('app_database.db')
-        .build()
-        .then((database) {
-      dao = database.taskListDao;
-    });
+  @override
+  Future<void> init() async {
+    var database =
+        await $FloorAppDatabase.databaseBuilder('app_database.db').build();
+    dao = database.taskListDao;
   }
 
   @override
   Stream<List<TaskList>> getTaskListsAsStream() {
-    var data = dao.getAllTaskListsAsStream();
+    var data = dao!.getAllTaskListsAsStream();
     return data.map(
       (list) => list
-          .map((taskList) => TaskListMapper().mapFromDatabase(taskList))
+          .map((taskList) => TaskListMapper.mapFromDatabase(taskList))
           .toList(),
     );
   }
 
   @override
   Future<List<TaskList>> getTaskLists() async {
-    var data = await dao.getAllTaskLists();
-    return data.map((list) => TaskListMapper().mapFromDatabase(list)).toList();
+    var data = await dao!.getAllTaskLists();
+    return data.map((list) => TaskListMapper.mapFromDatabase(list)).toList();
   }
 
   @override
-  void addTaskList(TaskList taskList) {
-    dao.insertList(TaskListMapper().mapToDatabase(taskList));
+  Future<void> addTaskList(TaskList taskList) async {
+    await dao!.insertList(TaskListMapper.mapToDatabase(taskList));
+  }
+
+  @override
+  Future<int> getTaskListId(String name) async {
+    var taskList = await dao!.getListByName(name);
+    return taskList!.id!;
   }
 
   @override
@@ -45,7 +49,7 @@ class CacheDataSourceImpl implements CacheDataSource {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
     list.name = name;
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
   }
 
   @override
@@ -53,14 +57,24 @@ class CacheDataSourceImpl implements CacheDataSource {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
     list.order = order;
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
+  }
+
+  @override
+  void syncTaskLists(List<TaskList> taskLists) async {
+    var currentList = await dao!.getAllTaskLists();
+    var networkList = taskLists.map((e) => TaskListMapper.mapToDatabase(e)).toList();
+    networkList.forEach((list) {
+      var exists = currentList.any((element) => element.id == list.id);
+      exists ? dao!.updateList(list) : dao!.insertList(list);
+    });
   }
 
   @override
   void deleteTaskList(int index) async {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
-    dao.deleteList(TaskListMapper().mapToDatabase(list));
+    dao!.deleteList(TaskListMapper.mapToDatabase(list));
   }
 
   // Task
@@ -76,7 +90,7 @@ class CacheDataSourceImpl implements CacheDataSource {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
     list.tasks.add(task);
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
   }
 
   @override
@@ -85,7 +99,7 @@ class CacheDataSourceImpl implements CacheDataSource {
     var list = taskLists[index];
     var taskIndex = list.tasks.indexWhere((item) => item.id == task.id);
     list.tasks[taskIndex] = task;
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
   }
 
   @override
@@ -94,7 +108,7 @@ class CacheDataSourceImpl implements CacheDataSource {
     var list = taskLists[index];
     var taskIndex = list.tasks.indexWhere((item) => item.id == task.id);
     list.tasks[taskIndex].completed = !task.completed;
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
   }
 
   @override
@@ -107,8 +121,8 @@ class CacheDataSourceImpl implements CacheDataSource {
     var newList = taskLists[newListIndex];
     newList.tasks.add(task);
 
-    dao.updateList(TaskListMapper().mapToDatabase(list));
-    dao.updateList(TaskListMapper().mapToDatabase(newList));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(newList));
     return newListIndex;
   }
 
@@ -117,7 +131,7 @@ class CacheDataSourceImpl implements CacheDataSource {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
     list.tasks.removeWhere((item) => item.id == task.id);
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
   }
 
   @override
@@ -125,6 +139,12 @@ class CacheDataSourceImpl implements CacheDataSource {
     var taskLists = await getTaskLists();
     var list = taskLists[index];
     list.tasks.removeWhere((task) => task.completed);
-    dao.updateList(TaskListMapper().mapToDatabase(list));
+    dao!.updateList(TaskListMapper.mapToDatabase(list));
+  }
+
+  @override
+  Future<void> deleteDatabase() async {
+    var taskLists = await dao!.getAllTaskLists();
+    dao!.deleteAll(taskLists);
   }
 }
