@@ -22,7 +22,9 @@ class TaskDateTime extends StatelessWidget {
               children: [
                 Chip(
                   padding: const EdgeInsets.all(10),
-                  label: Text(DateFormat.MMMEd().format(dateTime!)),
+                  label: Text(
+                    "${DateFormat.MMMEd().format(dateTime!.toLocal())}, ${DateFormat.jm().format(dateTime!.toLocal())}",
+                  ),
                   deleteIcon: const Icon(
                     Icons.close,
                     size: 17,
@@ -31,7 +33,8 @@ class TaskDateTime extends StatelessWidget {
                   backgroundColor: Colors.transparent,
                   shape: StadiumBorder(
                     side: BorderSide(
-                        color: Theme.of(context).colorScheme.surface),
+                      color: Theme.of(context).colorScheme.surface,
+                    ),
                   ),
                 ),
               ],
@@ -39,14 +42,22 @@ class TaskDateTime extends StatelessWidget {
           : const Text('Add date/time'),
       onTap: () async {
         FocusScope.of(context).unfocus();
-        var value = await showDatePicker(
+        var date = await showDatePicker(
           context: context,
           initialDate: dateTime ?? DateTime.now(),
           firstDate: DateTime(2000),
           lastDate: DateTime(3000),
         );
-        if (value != null) {
-          update(value.toUtc());
+        if (date != null) {
+          var time = await showTimePicker(
+            context: context,
+            initialTime: const TimeOfDay(hour: 7, minute: 0),
+          );
+          if (time != null) {
+            date = DateTime(
+                date.year, date.month, date.day, time.hour, time.minute);
+            update(date.toUtc());
+          }
         }
       },
     );

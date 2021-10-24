@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:tasks/blocs/task_lists/task_lists_bloc.dart';
 import 'package:tasks/blocs/task_lists/task_lists_provider.dart';
 import 'package:tasks/model/task_list.dart';
+import 'package:tasks/network/firebase.dart';
 import 'package:tasks/screens/home_screen/bottom_bar/my_bottom_bar.dart';
 import 'package:tasks/screens/home_screen/new_task/my_floating_button.dart';
 import 'package:tasks/screens/home_screen/task_lists/task_list_widget.dart';
@@ -26,6 +27,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
       bloc = TaskListsProvider.of(context);
       await bloc.init();
       await bloc.syncTaskLists();
+      await setFirebaseNotification();
     }
     setState(() {
       synced = true;

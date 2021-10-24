@@ -107,24 +107,24 @@ class NetworkDataSourceImpl extends NetworkDataSource {
     if (response.statusCode == 200) return;
     throw Exception(response.body);
   }
+}
 
-  Future<Map<String, String>> authHeaders() async {
-    final prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
+Future<Map<String, String>> authHeaders() async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
 
-    return {
-      'Authorization': 'Bearer $token',
-    };
-  }
+  return {
+    'Authorization': 'Bearer $token',
+  };
+}
 
-  Future<Map<String, String>> postAuthHeaders() async {
-    final prefs = await SharedPreferences.getInstance();
-    var token = prefs.getString('token');
+Future<Map<String, String>> postAuthHeaders() async {
+  final prefs = await SharedPreferences.getInstance();
+  var token = prefs.getString('token');
 
-    return {
-      "Accept": "application/json",
-      "content-type": "application/json",
-      'Authorization': 'Bearer $token',
-    };
-  }
+  return {
+    "Accept": "application/json",
+    "content-type": "application/json",
+    'Authorization': 'Bearer $token',
+  };
 }

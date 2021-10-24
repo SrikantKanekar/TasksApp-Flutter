@@ -52,7 +52,9 @@ class _NewTaskContentState extends State<NewTaskContent> {
                 dateTime != null
                     ? Chip(
                         padding: const EdgeInsets.all(10),
-                        label: Text(DateFormat.MMMEd().format(dateTime!)),
+                        label: Text(
+                          "${DateFormat.MMMEd().format(dateTime!)}, ${DateFormat.jm().format(dateTime!)}",
+                        ),
                         deleteIcon: const Icon(
                           Icons.close,
                           size: 17,
@@ -65,7 +67,8 @@ class _NewTaskContentState extends State<NewTaskContent> {
                         backgroundColor: Colors.transparent,
                         shape: StadiumBorder(
                           side: BorderSide(
-                              color: Theme.of(context).colorScheme.surface),
+                            color: Theme.of(context).colorScheme.surface,
+                          ),
                         ),
                       )
                     : IconButton(
@@ -77,6 +80,23 @@ class _NewTaskContentState extends State<NewTaskContent> {
                             firstDate: DateTime(2000),
                             lastDate: DateTime(3000),
                           );
+                          if (dateTime != null) {
+                            var time = await showTimePicker(
+                              context: context,
+                              initialTime: const TimeOfDay(hour: 7, minute: 0),
+                            );
+                            if (time != null) {
+                              dateTime = DateTime(
+                                dateTime!.year,
+                                dateTime!.month,
+                                dateTime!.day,
+                                time.hour,
+                                time.minute,
+                              );
+                            } else {
+                              dateTime = null;
+                            }
+                          }
                           setState(() {});
                           focusNode.requestFocus();
                         },

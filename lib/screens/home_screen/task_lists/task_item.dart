@@ -38,9 +38,9 @@ class TaskItem extends StatelessWidget {
               children: [
                 Chip(
                   label: Text(
-                    DateFormat.MMMEd().format(task.dateTime!),
+                    DateFormat.MMMEd().format(task.dateTime!.toLocal()),
                     style: TextStyle(
-                      color: task.dateTime!.isBefore(DateTime.now())
+                      color: task.dateTime!.toLocal().isBefore(DateTime.now())
                           ? Theme.of(context).colorScheme.error
                           : Theme.of(context).colorScheme.onBackground,
                     ),
