@@ -1,16 +1,29 @@
-# tasks
+# Tasks-Android
 
-A new Flutter project.
+A todo list Flutter application for Android and iOS
 
-## Getting Started
+## Screenshots
 
-This project is a starting point for a Flutter application.
+### Login/Register screens
 
-A few resources to get you started if this is your first Flutter project:
+<img src="/screenshots/login.png" width="260"> &emsp; 
+<img src="/screenshots/signup.png" width="260"> &emsp; 
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+### Tasks screens
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<img src="/screenshots/tasks_screen.png" width="260"> &emsp; 
+<img src="/screenshots/tasks_completed.png" width="260"> &emsp; 
+<img src="/screenshots/create_task.png" width="260"> &emsp; 
+<img src="/screenshots/detail_screen.png" width="260"> &emsp; 
+<img src="/screenshots/options_bottomBar.png" width="260"> &emsp; 
+<img src="/screenshots/sort.png" width="260"> &emsp; 
+
+### List screens
+
+<img src="/screenshots/create_list.png" width="260"> &emsp; 
+<img src="/screenshots/list_bottomBar.png" width="260"> &emsp; 
+
+### Theme
+
+<img src="/screenshots/dark.png" width="260"> &emsp; 
+<img src="/screenshots/light.png" width="260"> &emsp; 
