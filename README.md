@@ -1,6 +1,8 @@
-# Tasks-Android
+# Tasks App
 
 A todo list Flutter application for Android and iOS
+
+Backend Api - https://github.com/SrikantKanekar/TasksApp-Api
 
 ## Screenshots
 
