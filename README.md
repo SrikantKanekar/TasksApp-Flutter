@@ -1,6 +1,6 @@
 # Tasks App
 
-A todo list Flutter application for Android and iOS
+The Tasks app is a productivity tool that enables users to create and manage their to-do lists. The app allows users to create tasks with a title, details, and optionally set reminder. Additionally, users can create lists to group related tasks together. The app also features login and registration functionality, and the ability to sync tasks with a backend server, providing users with seamless access to their tasks across multiple devices. In addition, the app includes a notification system that alerts users when a task's reminder time approaches, ensuring that users are reminded of their tasks even when they are not actively using the app.
 
 Backend Api - https://github.com/SrikantKanekar/TasksApp-Api
 
