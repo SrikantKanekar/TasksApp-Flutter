@@ -8,24 +8,25 @@ Backend Api - https://github.com/SrikantKanekar/TasksApp-Api
 
 ### Login/Register screens
 
-<img src="/screenshots/login.png" width="260"> &emsp; 
-<img src="/screenshots/signup.png" width="260"> &emsp; 
+<img src="/screenshots/login.png" width="30%"> &nbsp; 
+<img src="/screenshots/signup.png" width="30%"> &nbsp; 
 
 ### Tasks screens
 
-<img src="/screenshots/tasks_screen.png" width="260"> &emsp; 
-<img src="/screenshots/tasks_completed.png" width="260"> &emsp; 
-<img src="/screenshots/create_task.png" width="260"> &emsp; 
-<img src="/screenshots/detail_screen.png" width="260"> &emsp; 
-<img src="/screenshots/options_bottomBar.png" width="260"> &emsp; 
-<img src="/screenshots/sort.png" width="260"> &emsp; 
+<img src="/screenshots/tasks_screen.png" width="30%"> &nbsp; 
+<img src="/screenshots/tasks_completed.png" width="30%"> &nbsp; 
+<img src="/screenshots/create_task.png" width="30%"> &nbsp; 
+
+<img src="/screenshots/detail_screen.png" width="30%"> &nbsp; 
+<img src="/screenshots/options_bottomBar.png" width="30%"> &nbsp; 
+<img src="/screenshots/sort.png" width="30%"> &nbsp; 
 
 ### List screens
 
-<img src="/screenshots/create_list.png" width="260"> &emsp; 
-<img src="/screenshots/list_bottomBar.png" width="260"> &emsp; 
+<img src="/screenshots/create_list.png" width="30%"> &nbsp; 
+<img src="/screenshots/list_bottomBar.png" width="30%"> &nbsp; 
 
 ### Theme
 
-<img src="/screenshots/dark.png" width="260"> &emsp; 
-<img src="/screenshots/light.png" width="260"> &emsp; 
+<img src="/screenshots/dark.png" width="30%"> &nbsp; 
+<img src="/screenshots/light.png" width="30%"> &nbsp; 
